@@ -11,7 +11,7 @@ ascenseur::~ascenseur()
 }
 
 /**
- * L'ascenceur monte d'un etage en direction de l'étage souhaite
+ * L'ascenceur boouge d'un etage en direction de l'etage souhaite
  */
 void ascenseur::bouger()
 {
@@ -22,25 +22,17 @@ void ascenseur::bouger()
 }
 
 /**
- * Les personnes qui souhaitent aller a cet etage monte dans l'ascenceur
+ * Toutes les personnes de l'etage qui attendent l'ascenseur, y monte
  */
-void ascenseur::entrer(queue *queue)
-{ /*
-    for (int i = 0; i < queue->getFile()->size(); i++)
-    {
-        file_->push_back((*queue->getFile())[i]);
-    }*/
-    file_->merge(*(queue->getFile()));
-    // if (queue->getFile()->empty())
-    //     printf("empty !!!");
-    // else
-    //     printf("encore plein");
+void ascenseur::entrer(etage *etage)
+{
+    file_->merge(*(etage->getQAscenseur()->getFile()));
 }
 
 /**
- * 
+ * Toutes les personnes de l'ascenseur qui attendent l'ascenseur, y monte
  */
-void ascenseur::sortir(int seconde, queue *queue)
+void ascenseur::sortir(int seconde, etage *etage)
 {
     for (list<personne *>::iterator it = file_->begin(); it != file_->end(); it++)
     {
@@ -51,12 +43,18 @@ void ascenseur::sortir(int seconde, queue *queue)
             (*it)->setDepart(seconde);
             (*it)->setEtage(etage_);
             (*it)->setDestination(1);
-            queue->getFile()->push_back(*it);
+
+            //Fonction pour faire des stats
+            
+            etage->getQAttente()->getFile()->push_back(*it);
             file_->erase(it);
         }
     }
 }
 
+/**
+ * L'ascenseur choisit sa destination 
+ */
 void ascenseur::choisirDestination(vector<etage> *tabEtage)
 {
     //Balayage
@@ -75,8 +73,6 @@ void ascenseur::choisirDestination(vector<etage> *tabEtage)
             i++;
         }
         destination_ = i < tabEtage->size() ? i + 1 : 1;
-
-        // destination_ = etage_;
     }
     else
     {
@@ -86,6 +82,9 @@ void ascenseur::choisirDestination(vector<etage> *tabEtage)
     }
 }
 
+/**
+ * Fonction d'affichage d'ascenseur
+ */
 void ascenseur::afficher()
 {
     printf("Ascenseur #%d\tEtage : %d\tDestination : %d\tEtage Max : %d\n", numero_, etage_, destination_, etageMax_);

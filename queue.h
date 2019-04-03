@@ -9,19 +9,20 @@ using namespace std;
 
 class queue
 {
-  private:
+private:
 	int numero_;
 	list<personne *> *file_;
 
-  public:
+public:
 	queue(int numero = -1);
 	~queue();
 	void afficher();
 
 	//Getters
 	list<personne *> *getFile() { return file_; }
+
 	//Setters
-	void setFile(list<personne *> *file) { file_ = file; }
+	// void setFile(list<personne *> *file) { file_ = file; }
 };
 
 #endif

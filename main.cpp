@@ -15,7 +15,7 @@ int main()
     int const N = 2;
     int const F = 7;
 
-    //Creation des étage avec 2 queues
+    //Creation des etages avec 2 queues
     vector<etage> tabEtage;
     for (int i = 0; i < F; i++)
     {
@@ -62,21 +62,21 @@ int main()
         }
 
         //Une personne arrive toutes les 30s à l'étage du dessous
-        if (seconde % 10 == 0 && actionAjoutPersonne)
+        if (seconde % 3 == 0 && actionAjoutPersonne)
         {
             tabEtage[0].getQAscenseur()->getFile()->push_back((new personne(numero_personne, seconde, -1, rand() % F + 1, 1, 60)));
             numero_personne++;
             actionAjoutPersonne = false;
         }
 
-        if (seconde % 3 == 0 && seconde > 9 && actionAscenseur)
+        if (seconde % 1 == 0 && seconde > 9 && actionAscenseur)
         {
             for (int i = 0; i < tabAscenseur.size(); i++)
             {
                 //Les personnes sortent de l'ascenseur
-                tabAscenseur[i].sortir(seconde, tabEtage[tabAscenseur[i].getEtage() - 1].getQAttente());
+                tabAscenseur[i].sortir(seconde, &tabEtage[tabAscenseur[i].getEtage() - 1]);
                 //Les personnes entrent dans l'ascenceur
-                tabAscenseur[i].entrer(tabEtage[tabAscenseur[i].getEtage() - 1].getQAscenseur());
+                tabAscenseur[i].entrer(&tabEtage[tabAscenseur[i].getEtage() - 1]);
                 //Choix destination des ascenseurs
                 tabAscenseur[i].choisirDestination(&tabEtage);
                 //Déplacement des ascenceurs

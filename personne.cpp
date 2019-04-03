@@ -9,6 +9,9 @@ personne::~personne()
 {
 }
 
+/**
+ * Fonction d'affichage de personne
+ */
 void personne::afficher()
 {
     printf("Personne #%d\tArrivee : %d\tDepart : %d\tEtage: %d (%d)\tAttente : %d s\n", numero_, arrivee_, depart_, etage_, destination_, tempsAttente_);

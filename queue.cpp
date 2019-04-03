@@ -9,6 +9,9 @@ queue::~queue()
 {
 }
 
+/**
+ * Fonction d'affichage de queue
+ */
 void queue::afficher()
 {
     // printf("taille : %d\n", file_->size());

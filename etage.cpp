@@ -13,6 +13,9 @@ etage::~etage()
     qAttente_->~queue();
 }
 
+/**
+ * Les perssonnes qui ont termine leurs affaires a leur etage, change de file pour attendre l'ascenseur pour redescendre
+ */
 void etage::transferer()
 {
     list<personne *>::iterator it;
@@ -26,6 +29,9 @@ void etage::transferer()
     }
 }
 
+/**
+ * Fonction d'affichage d'etage
+ */
 void etage::afficher()
 {
     printf("Queue d'ascenseur #%d\t", numero_);

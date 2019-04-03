@@ -22,17 +22,20 @@ private:
 public:
   ascenseur(int numero = -1, int etage = -1, int destination = -1, int etageMax = -1);
   ~ascenseur();
+  
   void bouger();
-  void entrer(queue *queue);
-  void sortir(int seconde, queue *queue);
+  void entrer(etage *etage);
+  void sortir(int seconde, etage *etage);
   void choisirDestination(vector<etage> *tabEtage);
   void afficher();
+
   //Getters
   list<personne *> *getFile() { return file_; }
   int getEtage() { return etage_; }
+
   //Setters
-  void setDestination(int destination) { destination_ = destination; }
-  void setFile(list<personne *> *file) { file_ = file; }
+  // void setDestination(int destination) { destination_ = destination; }
+  // void setFile(list<personne *> *file) { file_ = file; }
 };
 
 #endif
