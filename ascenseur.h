@@ -3,8 +3,10 @@
 
 #include <cstdio>
 #include <list>
+#include <vector>
 #include "queue.h"
 #include "personne.h"
+#include "etage.h"
 
 using namespace std;
 
@@ -23,7 +25,7 @@ public:
   void bouger();
   void entrer(queue *queue);
   void sortir(int seconde, queue *queue);
-  void choisirDestination();
+  void choisirDestination(vector<etage> *tabEtage);
   void afficher();
   //Getters
   list<personne *> *getFile() { return file_; }

@@ -2,7 +2,7 @@
 
 queue::queue(int numero) : numero_(numero)
 {
-    file_ = new vector<personne *>(0);
+    file_ = new list<personne *>(0);
 }
 
 queue::~queue()
@@ -11,10 +11,12 @@ queue::~queue()
 
 void queue::afficher()
 {
-    printf("taille : %d\n", file_->size());
-    for (int i = 0; i < file_->size(); i++)
+    // printf("taille : %d\n", file_->size());
+    printf("\n");
+    list<personne*>::iterator it;
+    for (it=file_->begin(); it != file_->end(); it++)
     {
-        (*file_)[i]->afficher();
+        (*it)->afficher();
     }
     printf("\n");
 }

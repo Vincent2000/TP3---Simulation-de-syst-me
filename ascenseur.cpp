@@ -15,29 +15,26 @@ ascenseur::~ascenseur()
  */
 void ascenseur::bouger()
 {
-    if (!file_->empty())
-    {
-        if (etage_ < destination_)
-        {
-            etage_++;
-        }
-        else if (etage_ > destination_)
-        {
-            etage_--;
-        }
-    }
+    if (etage_ < destination_)
+        etage_++;
+    else if (etage_ > destination_)
+        etage_--;
 }
 
 /**
  * Les personnes qui souhaitent aller a cet etage monte dans l'ascenceur
  */
 void ascenseur::entrer(queue *queue)
-{
+{ /*
     for (int i = 0; i < queue->getFile()->size(); i++)
     {
         file_->push_back((*queue->getFile())[i]);
-    }
-    queue->setFile(new vector<personne *>(0));
+    }*/
+    file_->merge(*(queue->getFile()));
+    // if (queue->getFile()->empty())
+    //     printf("empty !!!");
+    // else
+    //     printf("encore plein");
 }
 
 /**
@@ -52,19 +49,41 @@ void ascenseur::sortir(int seconde, queue *queue)
         if ((*it)->getDestination() == destination_ && etage_ == destination_)
         {
             (*it)->setDepart(seconde);
+            (*it)->setEtage(etage_);
+            (*it)->setDestination(1);
             queue->getFile()->push_back(*it);
             file_->erase(it);
         }
     }
 }
 
-void ascenseur::choisirDestination()
+void ascenseur::choisirDestination(vector<etage> *tabEtage)
 {
     //Balayage
-    if (etage_ == 1)
-        destination_ = 7;
-    else if (etage_ == 7)
-        destination_ = 1;
+    // if (etage_ == 1)
+    //     destination_ = 7;
+    // else if (etage_ == 7)
+    //     destination_ = 1;
+
+    //Plus de passager dans l'ascensseur
+    //l'ascenceur va là où il y a de la demande
+    if (file_->empty())
+    {
+        int i = 0;
+        while (i < tabEtage->size() && (*tabEtage)[i].getQAscenseur()->getFile()->empty())
+        {
+            i++;
+        }
+        destination_ = i < tabEtage->size() ? i + 1 : 1;
+
+        // destination_ = etage_;
+    }
+    else
+    {
+        //First-Come First-Serve
+        list<personne *>::iterator it = file_->begin();
+        destination_ = (*it)->getDestination();
+    }
 }
 
 void ascenseur::afficher()

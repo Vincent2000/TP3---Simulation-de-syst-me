@@ -15,21 +15,21 @@ int main()
     int const N = 2;
     int const F = 7;
 
+    //Creation des étage avec 2 queues
+    vector<etage> tabEtage;
+    for (int i = 0; i < F; i++)
+    {
+        tabEtage.push_back(etage(i + 1));
+    }
+
     //Creation des ascenseurs
     vector<ascenseur> tabAscenseur;
     ascenseur a;
     for (int i = 0; i < N; i++)
     {
         a = ascenseur(i + 1, 1, 3, F);
-        a.choisirDestination();
+        a.choisirDestination(&tabEtage);
         tabAscenseur.push_back(a);
-    }
-
-    //Creation des étage avec 2 queues
-    vector<etage> tabEtage;
-    for (int i = 0; i < F; i++)
-    {
-        tabEtage.push_back(etage(i + 1));
     }
 
     std::clock_t start;
@@ -41,6 +41,7 @@ int main()
     bool actionAjoutPersonne = false;
     bool actionAscenseur = false;
     bool actionAffichage = false;
+    bool actionQueue = false;
 
     printf("\n\n");
     printf("**********************************\n");
@@ -57,12 +58,13 @@ int main()
             actionAjoutPersonne = true;
             actionAscenseur = true;
             actionAffichage = true;
+            actionQueue = true;
         }
 
         //Une personne arrive toutes les 30s à l'étage du dessous
-        if (seconde % 3 == 0 && actionAjoutPersonne)
+        if (seconde % 10 == 0 && actionAjoutPersonne)
         {
-            tabEtage[0].getQAscenseur()->getFile()->push_back((new personne(numero_personne, seconde, -1, rand() % F + 1, 1)));
+            tabEtage[0].getQAscenseur()->getFile()->push_back((new personne(numero_personne, seconde, -1, rand() % F + 1, 1, 60)));
             numero_personne++;
             actionAjoutPersonne = false;
         }
@@ -76,11 +78,25 @@ int main()
                 //Les personnes entrent dans l'ascenceur
                 tabAscenseur[i].entrer(tabEtage[tabAscenseur[i].getEtage() - 1].getQAscenseur());
                 //Choix destination des ascenseurs
-                tabAscenseur[i].choisirDestination();
+                tabAscenseur[i].choisirDestination(&tabEtage);
                 //Déplacement des ascenceurs
                 tabAscenseur[i].bouger();
             }
             actionAscenseur = false;
+        }
+
+        if (seconde % 1 == 0 && actionQueue)
+        {
+            list<personne *>::iterator it;
+            for (int i = 1; i < tabEtage.size(); i++)
+            {
+                for (it = tabEtage[i].getQAttente()->getFile()->begin(); it != tabEtage[i].getQAttente()->getFile()->end(); it++)
+                {
+                    (*it)->decrementerTempsAttente();
+                }
+                tabEtage[i].transferer();
+            }
+            actionQueue = false;
         }
 
         if (seconde % 1 == 0 && actionAffichage)

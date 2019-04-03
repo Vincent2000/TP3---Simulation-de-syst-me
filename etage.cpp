@@ -13,6 +13,19 @@ etage::~etage()
     qAttente_->~queue();
 }
 
+void etage::transferer()
+{
+    list<personne *>::iterator it;
+    for (it = qAttente_->getFile()->begin(); it != qAttente_->getFile()->end(); it++)
+    {
+        if ((*it)->getTempsAttente() <= 0)
+        {
+            qAscenseur_->getFile()->push_back(*it);
+            qAttente_->getFile()->erase(it);
+        }
+    }
+}
+
 void etage::afficher()
 {
     printf("Queue d'ascenseur #%d\t", numero_);
