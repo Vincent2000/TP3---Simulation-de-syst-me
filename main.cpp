@@ -27,7 +27,7 @@ int main()
     ascenseur a;
     for (int i = 0; i < N; i++)
     {
-        a = ascenseur(i + 1, 1, 3, F);
+        a = ascenseur(i + 1, 1, 1, F);
         a.choisirDestination(&tabEtage);
         tabAscenseur.push_back(a);
     }
@@ -71,7 +71,7 @@ int main()
 
         if (seconde % 1 == 0 && seconde > 9 && actionAscenseur)
         {
-            for (int i = 0; i < tabAscenseur.size(); i++)
+           for (int i = 0; i < tabAscenseur.size(); i++)
             {
                 //Les personnes sortent de l'ascenseur
                 tabAscenseur[i].sortir(seconde, &tabEtage[tabAscenseur[i].getEtage() - 1]);

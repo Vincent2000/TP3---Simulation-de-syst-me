@@ -45,10 +45,28 @@ void ascenseur::sortir(int seconde, etage *etage)
             (*it)->setDestination(1);
 
             //Fonction pour faire des stats
-            
+
             etage->getQAttente()->getFile()->push_back(*it);
             file_->erase(it);
         }
+    }
+}
+
+void ascenseur::firstComeFirstServe()
+{
+    list<personne *>::iterator it = file_->begin();
+    destination_ = (*it)->getDestination();
+}
+
+void ascenseur::shortestSeekTimeFirst()
+{
+    list<personne *>::iterator it;
+    for (it = file_->begin(); it != file_->end(); it++)
+    {
+        if (destination_ == etage_)
+            destination_ = (*it)->getDestination();
+        else if (abs((*it)->getDestination() - etage_) < abs(destination_ - etage_))
+            destination_ = (*it)->getDestination();
     }
 }
 
@@ -57,14 +75,11 @@ void ascenseur::sortir(int seconde, etage *etage)
  */
 void ascenseur::choisirDestination(vector<etage> *tabEtage)
 {
-    //Balayage
-    // if (etage_ == 1)
-    //     destination_ = 7;
-    // else if (etage_ == 7)
-    //     destination_ = 1;
 
     //Plus de passager dans l'ascensseur
     //l'ascenceur va là où il y a de la demande
+    //en traitant en priorite le bas
+    //si personne, il reste la ou il est
     if (file_->empty())
     {
         int i = 0;
@@ -72,13 +87,18 @@ void ascenseur::choisirDestination(vector<etage> *tabEtage)
         {
             i++;
         }
-        destination_ = i < tabEtage->size() ? i + 1 : 1;
+        if (i < tabEtage->size())
+        {
+            destination_ = i + 1;
+        }
     }
     else
     {
         //First-Come First-Serve
-        list<personne *>::iterator it = file_->begin();
-        destination_ = (*it)->getDestination();
+        // firstComeFirstServe();
+
+        // Shortest-Seek-Time-First
+        shortestSeekTimeFirst();
     }
 }
 

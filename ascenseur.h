@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <list>
 #include <vector>
+#include <math.h>
 #include "queue.h"
 #include "personne.h"
 #include "etage.h"
@@ -22,10 +23,12 @@ private:
 public:
   ascenseur(int numero = -1, int etage = -1, int destination = -1, int etageMax = -1);
   ~ascenseur();
-  
+
   void bouger();
   void entrer(etage *etage);
   void sortir(int seconde, etage *etage);
+  void firstComeFirstServe();
+  void shortestSeekTimeFirst();
   void choisirDestination(vector<etage> *tabEtage);
   void afficher();
 
