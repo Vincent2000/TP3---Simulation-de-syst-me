@@ -32,7 +32,7 @@ void ascenseur::entrer(etage *etage)
 /**
  * Toutes les personnes de l'ascenseur qui attendent l'ascenseur, y monte
  */
-void ascenseur::sortir(int seconde, etage *etage)
+void ascenseur::sortir(int seconde, etage *etage, int &tempsAttenteTotale, int &nombrePassage)
 {
     for (list<personne *>::iterator it = file_->begin(); it != file_->end(); it++)
     {
@@ -45,7 +45,10 @@ void ascenseur::sortir(int seconde, etage *etage)
             (*it)->setDestination(1);
 
             //Fonction pour faire des stats
+            tempsAttenteTotale += (*it)->getDepart() - (*it)->getArrivee();
+            nombrePassage++;
 
+            //sort de la file de l'ascenseur pour celle de l'etage
             etage->getQAttente()->getFile()->push_back(*it);
             file_->erase(it);
         }

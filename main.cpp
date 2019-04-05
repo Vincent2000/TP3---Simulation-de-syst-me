@@ -32,6 +32,8 @@ int main()
         tabAscenseur.push_back(a);
     }
 
+    
+
     std::clock_t start;
     double duration;
     start = std::clock();
@@ -42,6 +44,8 @@ int main()
     bool actionAscenseur = false;
     bool actionAffichage = false;
     bool actionQueue = false;
+    int tempsAttenteTotale = 0;
+    int nombrePassage = 0;
 
     printf("\n\n");
     printf("**********************************\n");
@@ -55,6 +59,8 @@ int main()
         {
             seconde++;
             printf("%d ", seconde);
+            if (nombrePassage > 0)
+                printf("\tNombre de passage : %d\tTemps moyen : %f", nombrePassage, (float)tempsAttenteTotale / nombrePassage);
             actionAjoutPersonne = true;
             actionAscenseur = true;
             actionAffichage = true;
@@ -71,10 +77,10 @@ int main()
 
         if (seconde % 1 == 0 && seconde > 9 && actionAscenseur)
         {
-           for (int i = 0; i < tabAscenseur.size(); i++)
+            for (int i = 0; i < tabAscenseur.size(); i++)
             {
                 //Les personnes sortent de l'ascenseur
-                tabAscenseur[i].sortir(seconde, &tabEtage[tabAscenseur[i].getEtage() - 1]);
+                tabAscenseur[i].sortir(seconde, &tabEtage[tabAscenseur[i].getEtage() - 1], tempsAttenteTotale, nombrePassage);
                 //Les personnes entrent dans l'ascenceur
                 tabAscenseur[i].entrer(&tabEtage[tabAscenseur[i].getEtage() - 1]);
                 //Choix destination des ascenseurs
@@ -94,7 +100,7 @@ int main()
                 {
                     (*it)->decrementerTempsAttente();
                 }
-                tabEtage[i].transferer();
+                tabEtage[i].transferer(seconde);
             }
             actionQueue = false;
         }

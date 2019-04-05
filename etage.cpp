@@ -16,13 +16,15 @@ etage::~etage()
 /**
  * Les perssonnes qui ont termine leurs affaires a leur etage, change de file pour attendre l'ascenseur pour redescendre
  */
-void etage::transferer()
+void etage::transferer(int seconde)
 {
     list<personne *>::iterator it;
     for (it = qAttente_->getFile()->begin(); it != qAttente_->getFile()->end(); it++)
     {
         if ((*it)->getTempsAttente() <= 0)
         {
+            (*it)->setArrivee(seconde);
+            (*it)->setDepart(-1);
             qAscenseur_->getFile()->push_back(*it);
             qAttente_->getFile()->erase(it);
         }

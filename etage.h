@@ -14,7 +14,7 @@ public:
   etage(int numero);
   ~etage();
 
-  void transferer();
+  void transferer(int seconde);
   void afficher();
 
   //Getters

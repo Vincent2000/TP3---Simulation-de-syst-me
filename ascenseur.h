@@ -26,7 +26,7 @@ public:
 
   void bouger();
   void entrer(etage *etage);
-  void sortir(int seconde, etage *etage);
+  void sortir(int seconde, etage *etage, int &tempsAttenteTotale, int &nombrePassage);
   void firstComeFirstServe();
   void shortestSeekTimeFirst();
   void choisirDestination(vector<etage> *tabEtage);

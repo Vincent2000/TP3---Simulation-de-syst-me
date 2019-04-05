@@ -14,7 +14,6 @@ queue::~queue()
  */
 void queue::afficher()
 {
-    // printf("taille : %d\n", file_->size());
     printf("\n");
     list<personne *>::iterator it;
     for (it = file_->begin(); it != file_->end(); it++)
