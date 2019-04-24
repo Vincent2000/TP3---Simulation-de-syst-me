@@ -18,7 +18,10 @@ int main()
 	std::cout << "****  Debut de la simulation  ****" << std::endl;
 	std::cout << "**********************************" << std::endl;
 	std::cout << std::endl << std::endl;
+
+#ifdef VERBEUX
 	std::cout << " Journee |  nombre de passages | temps de reponse percu moyen" << std::endl;
+#endif // VERBEUX
 
 	float tempsPercuMoyenPlusieursJours = 0;
 
@@ -51,7 +54,7 @@ int main()
 		default_random_engine gen(time(NULL));
 		exponential_distribution<> distribExp(1. / MOYENNE_TEMPS_TRAVAIL);
 
-		while (seconde < 36000) //On considère qu'une journée dure 10h
+		while (seconde < 3600 * HEURES_PAR_JOUR) //On considère qu'une journée dure 10h
 		{
 			seconde++;
 
@@ -79,7 +82,10 @@ int main()
 				tabEtage[i].transferer(seconde);
 			}
 		}
-		//std::cout << "    " << i << "    |        " << nombrePassage << "         |    " << tempsAttenteTotale * 1. / nombrePassage << "s" << std::endl;
+#ifdef VERBEUX
+		std::cout << "    " << i << "    |        " << nombrePassage << "         |    " << tempsAttenteTotale * 1. / nombrePassage << "s" << std::endl;
+#endif // VERBEUX
+
 		tempsPercuMoyenPlusieursJours += tempsAttenteTotale * 1. / nombrePassage;
 	}
 	tempsPercuMoyenPlusieursJours /= NOMBRE_JOURS;
