@@ -54,7 +54,7 @@ int main()
 		default_random_engine gen(time(NULL));
 		exponential_distribution<> distribExp(1. / MOYENNE_TEMPS_TRAVAIL);
 
-		while (seconde < 3600 * HEURES_PAR_JOUR) //On considère qu'une journée dure 10h
+		while (seconde < 3600 * HEURES_PAR_JOUR)
 		{
 			seconde++;
 
