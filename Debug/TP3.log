@@ -1,0 +1,14 @@
+﻿  ascenseur.cpp
+d:\mes documents\cours chicoutimi\simulation de systèmes\tp3---simulation-de-syst-me\ascenseur.cpp(167): warning C4018: '<' : incompatibilité signed/unsigned
+  etage.cpp
+d:\mes documents\cours chicoutimi\simulation de systèmes\tp3---simulation-de-syst-me\etage.cpp(70): warning C4102: 'std' : étiquette non référencée
+  main.cpp
+d:\mes documents\cours chicoutimi\simulation de systèmes\tp3---simulation-de-syst-me\main.cpp(27): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned int', perte possible de données
+d:\mes documents\cours chicoutimi\simulation de systèmes\tp3---simulation-de-syst-me\main.cpp(51): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned int', perte possible de données
+d:\mes documents\cours chicoutimi\simulation de systèmes\tp3---simulation-de-syst-me\main.cpp(66): warning C4018: '<' : incompatibilité signed/unsigned
+d:\mes documents\cours chicoutimi\simulation de systèmes\tp3---simulation-de-syst-me\main.cpp(73): warning C4018: '<' : incompatibilité signed/unsigned
+d:\mes documents\cours chicoutimi\simulation de systèmes\tp3---simulation-de-syst-me\main.cpp(83): warning C4244: '+=' : conversion de 'double' en 'float', perte possible de données
+  personne.cpp
+  queue.cpp
+  Génération de code en cours...
+  TP3.vcxproj -> D:\Mes Documents\Cours Chicoutimi\Simulation de systèmes\TP3---Simulation-de-syst-me\Debug\TP3.exe

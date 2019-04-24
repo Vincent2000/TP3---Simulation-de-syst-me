@@ -1,7 +1,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include <cstdio>
+#include <iostream>
 #include <list>
 #include "personne.h"
 

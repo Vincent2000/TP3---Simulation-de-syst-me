@@ -1,127 +1,88 @@
 #include <cstdio>
 #include <vector>
 #include <list>
-#include <ctime>
-#include <math.h>
+#include <cmath>
+#include <random>
+#include <time.h>
 #include "ascenseur.h"
 #include "personne.h"
 #include "queue.h"
 #include "etage.h"
+#include "Parametres.h"
 
 using namespace std;
 
 int main()
 {
-    int const N = 2;
-    int const F = 7;
+	std::cout << "**********************************" << std::endl;
+	std::cout << "****  Debut de la simulation  ****" << std::endl;
+	std::cout << "**********************************" << std::endl;
+	std::cout << std::endl << std::endl;
+	std::cout << " Journee |  nombre de passages | temps de reponse percu moyen" << std::endl;
 
-    //Creation des etages avec 2 queues
-    vector<etage> tabEtage;
-    for (int i = 0; i < F; i++)
-    {
-        tabEtage.push_back(etage(i + 1));
-    }
+	float tempsPercuMoyenPlusieursJours = 0;
 
-    //Creation des ascenseurs
-    vector<ascenseur> tabAscenseur;
-    ascenseur a;
-    for (int i = 0; i < N; i++)
-    {
-        a = ascenseur(i + 1, 1, 1, F);
-        a.choisirDestination(&tabEtage);
-        tabAscenseur.push_back(a);
-    }
+	for (int i = 0; i < NOMBRE_JOURS; i++)
+	{
+		srand(time(NULL));
 
-    
+		//Creation des etages avec 2 queues
+		vector<etage> tabEtage;
+		for (int i = 0; i < F; i++)
+		{
+			tabEtage.push_back(etage(i));
+		}
 
-    std::clock_t start;
-    double duration;
-    start = std::clock();
+		//Creation des ascenseurs
+		vector<ascenseur> tabAscenseur;
+		ascenseur a;
+		for (int i = 0; i < N; i++)
+		{
+			a = ascenseur(i, 0, 0, F - 1);
+			a.choisirDestination(&tabEtage);
+			tabAscenseur.push_back(a);
+		}
 
-    int seconde = 0;
-    int numero_personne = 0;
-    bool actionAjoutPersonne = false;
-    bool actionAscenseur = false;
-    bool actionAffichage = false;
-    bool actionQueue = false;
-    int tempsAttenteTotale = 0;
-    int nombrePassage = 0;
+		int seconde = 0;
+		int numero_personne = 0;
+		int tempsAttenteTotale = 0;
+		int nombrePassage = 0;
 
-    printf("\n\n");
-    printf("**********************************\n");
-    printf("****  Debut de la simulation  ****\n");
-    printf("**********************************\n");
-    printf("\n\n");
-    while (true)
-    {
-        duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
-        if (duration - seconde > 1)
-        {
-            seconde++;
-            printf("%d ", seconde);
-            if (nombrePassage > 0)
-                printf("\tNombre de passage : %d\tTemps moyen : %f", nombrePassage, (float)tempsAttenteTotale / nombrePassage);
-            actionAjoutPersonne = true;
-            actionAscenseur = true;
-            actionAffichage = true;
-            actionQueue = true;
-        }
+		default_random_engine gen(time(NULL));
+		exponential_distribution<> distribExp(1. / MOYENNE_TEMPS_TRAVAIL);
 
-        //Une personne arrive toutes les 30s à l'étage du dessous
-        if (seconde % 3 == 0 && actionAjoutPersonne)
-        {
-            tabEtage[0].getQAscenseur()->getFile()->push_back((new personne(numero_personne, seconde, -1, rand() % F + 1, 1, 60)));
-            numero_personne++;
-            actionAjoutPersonne = false;
-        }
+		while (seconde < 36000) //On considère qu'une journée dure 10h
+		{
+			seconde++;
 
-        if (seconde % 1 == 0 && seconde > 9 && actionAscenseur)
-        {
-            for (int i = 0; i < tabAscenseur.size(); i++)
-            {
-                //Les personnes sortent de l'ascenseur
-                tabAscenseur[i].sortir(seconde, &tabEtage[tabAscenseur[i].getEtage() - 1], tempsAttenteTotale, nombrePassage);
-                //Les personnes entrent dans l'ascenceur
-                tabAscenseur[i].entrer(&tabEtage[tabAscenseur[i].getEtage() - 1]);
-                //Choix destination des ascenseurs
-                tabAscenseur[i].choisirDestination(&tabEtage);
-                //Déplacement des ascenceurs
-                tabAscenseur[i].bouger();
-            }
-            actionAscenseur = false;
-        }
+			//On regarde si quelqu'un arrive à ce moment là
+			if (((float)rand() / (RAND_MAX)) < (float)LAMBDA_ARRIVEE / 60)
+			{
+				tabEtage[0].addToQAscenseur(new personne(numero_personne, seconde, -1, rand() % (F - 1) + 1, 1, (int)distribExp(gen)), seconde);
+				numero_personne++;
+			}
 
-        if (seconde % 1 == 0 && actionQueue)
-        {
-            list<personne *>::iterator it;
-            for (int i = 1; i < tabEtage.size(); i++)
-            {
-                for (it = tabEtage[i].getQAttente()->getFile()->begin(); it != tabEtage[i].getQAttente()->getFile()->end(); it++)
-                {
-                    (*it)->decrementerTempsAttente();
-                }
-                tabEtage[i].transferer(seconde);
-            }
-            actionQueue = false;
-        }
+			//Maj ascenseurs
+			for (int i = 0; i < tabAscenseur.size(); i++)
+			{
+				tabAscenseur[i].majAscenseur(seconde, &tabEtage, tempsAttenteTotale, nombrePassage);
+			}
 
-        if (seconde % 1 == 0 && actionAffichage)
-        {
-            //Affichage des ascenseurs
-            printf("\n\n");
-            for (int i = 0; i < tabAscenseur.size(); i++)
-            {
-                tabAscenseur[i].afficher();
-            }
-            //Affichage des queues
-            for (int i = 0; i < tabEtage.size(); i++)
-            {
-                tabEtage[i].afficher();
-            }
-            actionAffichage = false;
-        }
-    }
-
-    printf("Hello, world !\n");
-    return 0;
+			//On met à jour les personnes dans le batiments
+			list<personne *>::iterator it;
+			for (int i = 1; i < tabEtage.size(); i++)
+			{
+				for (it = tabEtage[i].getQAttente()->getFile()->begin(); it != tabEtage[i].getQAttente()->getFile()->end(); it++)
+				{
+					(*it)->decrementerTempsAttente();
+				}
+				tabEtage[i].transferer(seconde);
+			}
+		}
+		//std::cout << "    " << i << "    |        " << nombrePassage << "         |    " << tempsAttenteTotale * 1. / nombrePassage << "s" << std::endl;
+		tempsPercuMoyenPlusieursJours += tempsAttenteTotale * 1. / nombrePassage;
+	}
+	tempsPercuMoyenPlusieursJours /= NOMBRE_JOURS;
+	std::cout << std::endl << "Temps Percu Moyen sur toute la periode : " << tempsPercuMoyenPlusieursJours << "s" << std::endl;
+	return 0;
 }

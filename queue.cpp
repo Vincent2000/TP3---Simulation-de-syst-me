@@ -1,4 +1,5 @@
 #include "queue.h"
+#include "Parametres.h"
 
 queue::queue(int numero) : numero_(numero)
 {
@@ -14,11 +15,11 @@ queue::~queue()
  */
 void queue::afficher()
 {
-    printf("\n");
+	std::cout << std::endl;
     list<personne *>::iterator it;
     for (it = file_->begin(); it != file_->end(); it++)
     {
         (*it)->afficher();
     }
-    printf("\n");
+	std::cout << std::endl;
 }

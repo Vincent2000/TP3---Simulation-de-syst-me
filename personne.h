@@ -1,7 +1,7 @@
 #ifndef PERSONNE_H
 #define PERSONNE_H
 
-#include <cstdio>
+#include <iostream>
 
 class personne
 {
